@@ -61,27 +61,27 @@ private:
 			}
 			else if (r->left != NULL && r->right == NULL)
 			{
-				node* p = r;
+				node* temp = r;
 				r = r->left;
-				delete p;
+				delete temp;
 			}
 			else if (r->right != NULL && r->left == NULL)
 			{
-				node* p = r;
+				node* temp = r;
 				r = r->right;
-				delete p;
+				delete temp;
 			}
 			else
 			{
-				node* p = r->right;
-				while (p->left != NULL)
+				node* temp = r->right;
+				while (temp->left != NULL)
 				{
-					p = p->left;
+					temp = temp->left;
 				}
-				p->left = r->left;
-				p = r;
+				temp->left = r->left;
+				temp = r;
 				r = r->right;
-				delete p;
+				delete temp;
 			}
 		}
 	}

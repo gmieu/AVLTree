@@ -174,24 +174,24 @@ private:
 	{
 		if (difference(r) == -2)
 		{
-			if (difference(r->left) == -1)
+			if (difference(r->right) == 1)
+			{
+				rotateRightLeft(r);
+			}
+			else
+			{
+				rotateLeft(r);
+			}
+		}
+		else if (difference(r) == 2)
+		{
+			if (difference(r->left) == 1)
 			{
 				rotateRight(r);
 			}
 			else
 			{
 				rotateLeftRight(r);
-			}
-		}
-		else if (difference(r) == 2)
-		{
-			if (difference(r) == 1)
-			{
-				rotateLeft(r);
-			}
-			else
-			{
-				rotateRightLeft(r);
 			}
 		}
 	}

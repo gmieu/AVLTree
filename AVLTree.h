@@ -12,7 +12,7 @@ private:
 	};
 	node* root;
 
-	void append(node* &r, int v)
+	node* append(node*& r, int v)
 	{
 		if (r == NULL)
 		{
@@ -24,25 +24,33 @@ private:
 		else if (v > r->value)
 		{
 			append(r->right, v);
+			balance(r);
 		}
 		else
 		{
 			append(r->left, v);
+			balance(r);
 		}
+		
+		return r;
 	}
 
-
-	void clear(node* &r)
-	{
-		delete r;
-		r = NULL;
-	}
-
-	void remove(node* &r, int v)
+	void clear(node*& r)
 	{
 		if (r == NULL)
 		{
 			return;
+		}
+		clear(r->left);
+		clear(r->right);
+		delete r;
+	}
+
+	node* remove(node*& r, int v)
+	{
+		if (r == NULL)
+		{
+			return NULL;
 		}
 		else if (v < r->value)
 		{
@@ -61,29 +69,35 @@ private:
 			}
 			else if (r->left != NULL && r->right == NULL)
 			{
-				node* temp = r;
+				node* p = r;
 				r = r->left;
-				delete temp;
+				delete p;
 			}
 			else if (r->right != NULL && r->left == NULL)
 			{
-				node* temp = r;
+				node* p = r;
 				r = r->right;
-				delete temp;
+				delete p;
 			}
 			else
 			{
-				node* temp = r->right;
-				while (temp->left != NULL)
+				node* p = r->right;
+				while (p->left != NULL)
 				{
-					temp = temp->left;
+					p = p->left;
 				}
-				temp->left = r->left;
-				temp = r;
+				p->left = r->left;
+				p = r;
 				r = r->right;
-				delete temp;
+				delete p;
+			}
+			if (r == NULL)
+			{
+				return r;
 			}
 		}
+		balance(r);
+		return r;
 	}
 
 	bool find(node* r, int v)
@@ -120,7 +134,7 @@ private:
 	{
 		if (r == NULL)
 		{
-			return 0;
+			return -1;
 		}
 		else
 		{
@@ -137,40 +151,54 @@ private:
 		}
 	}
 
-	void rotateRight(node* &r)
+	node* rotateRight(node*& r)
 	{
-		node* p = r->left;
-		r->left = p->right;
-		p->right = r;
-		r = p;
+		node* p = r;
+		r = r->left;
+		p->left = r->right;
+		r->right = p;
+		cout << "right rotation" << endl;
+		return p;
 	}
 
-	void rotateLeft(node* &r)
+	node* rotateLeft(node*& r)
 	{
-		node* p = r->right;
-		r->right = p->left;
-		p->left = r;
-		r = p;
+		node* p = r;
+		r = r->right;
+		p->right = r->left;
+		r->left = p;
+		cout << "left rotation" << endl;
+		return p;
 	}
 
-	void rotateRightLeft(node* &r)
+	node* rotateRightLeft(node*& r)
 	{
+		cout << "right left rotation:" << endl;
 		rotateRight(r->right);
-		rotateLeft(r);
+		return rotateLeft(r);
 	}
 
-	void rotateLeftRight(node* &r)
+	node* rotateLeftRight(node*& r)
 	{
+		cout << "left right rotation:" << endl;
 		rotateLeft(r->left);
-		rotateRight(r);
+		return rotateRight(r);
 	}
 
 	int difference(node* r)
 	{
-		return height(r->left) - height(r->right);
+		if (r == NULL)
+		{
+			return 0;
+		}
+		else
+		{
+			return height(r->left) - height(r->right);
+		}
+		
 	}
 
-	void balance(node* &r)
+	node* balance(node*& r)
 	{
 		if (difference(r) == -2)
 		{
@@ -194,6 +222,8 @@ private:
 				rotateLeftRight(r);
 			}
 		}
+
+		return r;
 	}
 
 public:
@@ -226,8 +256,12 @@ public:
 	void print()
 	{
 		print(root);
-		height(root);
 
+	}
+
+	int height()
+	{
+		height(root);
 	}
 
 	bool isFull()
@@ -256,5 +290,4 @@ public:
 	}
 
 };
-
 #endif

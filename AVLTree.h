@@ -12,7 +12,7 @@ private:
 	};
 	node* root;
 
-	node* append(node*& r, int v)
+	node* insert(node*& r, int v)
 	{
 		if (r == NULL)
 		{
@@ -23,12 +23,12 @@ private:
 		}
 		else if (v > r->value)
 		{
-			append(r->right, v);
+			insert(r->right, v);
 			balance(r);
 		}
 		else
 		{
-			append(r->left, v);
+			insert(r->left, v);
 			balance(r);
 		}
 		
@@ -75,21 +75,21 @@ private:
 			}
 			else if (r->right != NULL && r->left == NULL)
 			{
-				node* p = r;
+				node* temp = r;
 				r = r->right;
-				delete p;
+				delete temp;
 			}
 			else
 			{
-				node* p = r->right;
-				while (p->left != NULL)
+				node* temp = r->right;
+				while (temp->left != NULL)
 				{
-					p = p->left;
+					temp = temp->left;
 				}
-				p->left = r->left;
-				p = r;
+				temp->left = r->left;
+				temp = r;
 				r = r->right;
-				delete p;
+				delete temp;
 			}
 			if (r == NULL)
 			{
@@ -120,13 +120,33 @@ private:
 		}
 	}
 
-	void print(node* r)
+	void printInorder(node* r)
 	{
 		if (r != NULL)
 		{
-			print(r->left);
+			printInorder(r->left);
 			cout << r->value << " ";
-			print(r->right);
+			printInorder(r->right);
+		}
+	}
+
+	void printPreorder(node* r)
+	{
+		if (r != NULL)
+		{
+			cout << r->value << " ";
+			printPreorder(r->left);
+			printPreorder(r->right);
+		}
+	}
+
+	void printPostorder(node* r)
+	{
+		if (r != NULL)
+		{
+			printPostorder(r->left);
+			printPostorder(r->right);
+			cout << r->value << " ";
 		}
 	}
 
@@ -241,9 +261,9 @@ public:
 	{
 		clear(root);
 	}
-	void append(int v)
+	void insert(int v)
 	{
-		append(root, v);
+		insert(root, v);
 	}
 	void remove(int v)
 	{
@@ -253,40 +273,21 @@ public:
 	{
 		find(root, v);
 	}
-	void print()
+	void printInorder()
 	{
-		print(root);
-
+		printInorder(root);
 	}
-
+	void printPreorder()
+	{
+		printPreorder(root);
+	}
+	void printPostorder()
+	{
+		printPostorder(root);
+	}
 	int height()
 	{
 		height(root);
-	}
-
-	bool isFull()
-	{
-		node* temp = new node;
-		if (!temp)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	bool isEmpty()
-	{
-		if (root == NULL)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 	}
 
 };
